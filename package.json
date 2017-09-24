@@ -6,13 +6,17 @@
   "license": "Apache Version 2.0",
   "author": "Google Inc.",
   "engines": {
-    "node": "~4.2"
+    "node": "^6.11"
   },
   "scripts": {
     "lint": "eslint --fix \"**/*.js\"",
     "test": "npm run lint",
-    "start": "firebase serve --only functions",
-    "deploy": "firebase deploy --only functions",
+    "copy": "cp ./src/* ./package.json ./functions/",
+    "clean": "rm -rf ./functions/**",
+    "build": "npm run clean && npm run copy",
+    "build-prod": "npm run clean && npm run copy && (cd ./functions; npm install;)",
+    "start": "npm run build && firebase serve --only functions",
+    "deploy": "npm run build-prod && firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "dependencies": {
